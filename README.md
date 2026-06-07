@@ -10,6 +10,7 @@ This repository implements the same bill-payments app — phone-OTP auth, locali
 |---|---|---|
 | [`flutter-riverpod`](../../tree/flutter-riverpod) | Flutter | Riverpod 3 (manual providers), freezed sealed unions, GoRouter, intl |
 | [`android-compose`](../../tree/android-compose) | Jetpack Compose | Hilt, StateFlow stores + ViewModel projections, Navigation 3, kotlinx-serialization |
+| [`swiftui`](../../tree/swiftui) | SwiftUI | @Observable stores + @State screen models, Observation tracking, NavigationStack typed routes, XcodeGen |
 
 Each branch's `README.md` carries the full architecture rulebook and, where ported, the mapping table from the original.
 
