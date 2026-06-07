@@ -11,6 +11,8 @@ This repository implements the same bill-payments app — phone-OTP auth, locali
 | [`flutter-riverpod`](../../tree/flutter-riverpod) | Flutter | Riverpod 3 (manual providers), freezed sealed unions, GoRouter, intl |
 | [`android-compose`](../../tree/android-compose) | Jetpack Compose | Hilt, StateFlow stores + ViewModel projections, Navigation 3, kotlinx-serialization |
 | [`swiftui`](../../tree/swiftui) | SwiftUI | @Observable stores + @State screen models, Observation tracking, NavigationStack typed routes, XcodeGen |
+| [`react-native-zustand`](../../tree/react-native-zustand) | React Native (bare) | Zustand 5 vanilla stores + projection hooks, discriminated-union ScreenData, React Navigation 7 Static API, hand-rolled stale-while-revalidate, i18next + ICU |
+| [`expo-zustand-query`](../../tree/expo-zustand-query) | React Native (Expo) | TanStack Query 5 (server cache) + Zustand 5 (client facts), expo-router typed routes, discriminated-union projections, i18next + ICU |
 
 Each branch's `README.md` carries the full architecture rulebook and, where ported, the mapping table from the original.
 
