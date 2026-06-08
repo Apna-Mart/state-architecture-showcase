@@ -1,0 +1,34 @@
+name: BillPayments
+options:
+  bundleIdPrefix: com.billpayments
+  deploymentTarget:
+    iOS: "26.0"
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+    SWIFT_APPROACHABLE_CONCURRENCY: "YES"
+targets:
+  BillPayments:
+    type: application
+    platform: iOS
+    sources: [BillPayments]
+    info:
+      path: BillPayments/Info.plist
+      properties:
+        UILaunchScreen: {}
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations: [en, hi, ar]
+        CADisableMinimumFrameDurationOnPhone: true
+  BillPaymentsTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [BillPaymentsTests]
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: "YES"
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/BillPayments.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BillPayments
+        BUNDLE_LOADER: $(TEST_HOST)
+    dependencies:
+      - target: BillPayments
+        embed: false

@@ -1,0 +1,6 @@
+*.xcodeproj
+BillPayments/Info.plist
+xcuserdata/
+.DS_Store
+DerivedData/
+.claude/
