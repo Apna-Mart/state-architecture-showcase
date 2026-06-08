@@ -1,0 +1,147 @@
+{
+  "@@locale": "en",
+  "appTitle": "ApnaMart",
+  "paymentFailedRetry": "Payment failed. Please retry.",
+  "invalidOtpMessage": "Invalid OTP. Enter any 6 digits.",
+  "somethingWentWrong": "Something went wrong. Try again.",
+  "storageFailedMessage": "Could not save your changes on this device.",
+  "mobileNumber": "Mobile number",
+  "sendOtp": "Send OTP",
+  "enterOtp": "Enter OTP",
+  "otpSentTo": "OTP sent to {phone}",
+  "@otpSentTo": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "verify": "Verify",
+  "changeNumber": "Change number",
+  "upcomingBills": "Upcoming bills",
+  "savedBillers": "Saved billers",
+  "payABill": "Pay a bill",
+  "retry": "Retry",
+  "billers": "Billers",
+  "searchBillers": "Search billers",
+  "typeAtLeastTwoCharacters": "Type at least 2 characters",
+  "noBillersMatch": "No billers match \"{query}\"",
+  "@noBillersMatch": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "searchFailed": "Search failed",
+  "billDetails": "Bill details",
+  "amountFieldLabel": "Amount (₹)",
+  "enterAmount": "Enter amount",
+  "continueLabel": "Continue",
+  "fetchBill": "Fetch Bill",
+  "reviewAndPay": "Review & Pay",
+  "accountValue": "Account: {account}",
+  "@accountValue": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      }
+    }
+  },
+  "nameValue": "Name: {name}",
+  "@nameValue": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "payAmount": "Pay {amount}",
+  "@payAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "payment": "Payment",
+  "paymentNotFound": "Payment not found",
+  "payingAmountTo": "Paying {amount} to {billerName}",
+  "@payingAmountTo": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "billerName": {
+        "type": "String"
+      }
+    }
+  },
+  "paidTo": "Paid to {billerName}",
+  "@paidTo": {
+    "placeholders": {
+      "billerName": {
+        "type": "String"
+      }
+    }
+  },
+  "receiptNumber": "Receipt {paymentId}",
+  "@receiptNumber": {
+    "placeholders": {
+      "paymentId": {
+        "type": "String"
+      }
+    }
+  },
+  "dateValue": "Date: {date}",
+  "@dateValue": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "saveBiller": "Save biller",
+  "done": "Done",
+  "paymentFailedSummary": "Payment of {amount} to {billerName} failed",
+  "@paymentFailedSummary": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "billerName": {
+        "type": "String"
+      }
+    }
+  },
+  "retryPayment": "Retry payment",
+  "backToHome": "Back to home",
+  "paymentHistory": "Payment history",
+  "noPaymentsYet": "No payments yet",
+  "statusProcessing": "Processing",
+  "statusSuccess": "Success",
+  "statusFailed": "Failed",
+  "dueToday": "Due today",
+  "dueInDays": "{days, plural, =1{Due in 1 day} other{Due in {days} days}}",
+  "@dueInDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "overdueByDays": "{days, plural, =1{Overdue by 1 day} other{Overdue by {days} days}}",
+  "@overdueByDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "settings": "Settings",
+  "language": "Language",
+  "theme": "Theme",
+  "systemDefault": "System default",
+  "themeLight": "Light",
+  "themeDark": "Dark"
+}
