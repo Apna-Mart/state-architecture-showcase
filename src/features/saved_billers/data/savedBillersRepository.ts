@@ -1,0 +1,23 @@
+import type { KeyValueStore } from '@/core/storage/keyValueStore';
+import { emptySavedBillers, type SavedBiller, type SavedBillers } from './savedBiller';
+
+const keyFor = (userId: string): string => `savedBillers.${userId}`;
+
+export interface SavedBillersRepository {
+  restore(userId: string): SavedBillers;
+  persist(userId: string, value: SavedBillers): void;
+}
+
+export class StoredSavedBillersRepository implements SavedBillersRepository {
+  constructor(private readonly store: KeyValueStore) {}
+
+  restore(userId: string): SavedBillers {
+    const raw = this.store.read(keyFor(userId));
+    if (raw === null) return emptySavedBillers();
+    return { items: JSON.parse(raw) as SavedBiller[] };
+  }
+
+  persist(userId: string, value: SavedBillers): void {
+    this.store.write(keyFor(userId), JSON.stringify(value.items));
+  }
+}
