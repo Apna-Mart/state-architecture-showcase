@@ -5,25 +5,31 @@ part 'ui_event.freezed.dart';
 
 @freezed
 sealed class UiEvent with _$UiEvent {
-  const factory UiEvent.paymentStarted(String paymentId) = PaymentStarted;
   const factory UiEvent.paymentFailed(String paymentId) = PaymentFailed;
   const factory UiEvent.otpRejected() = OtpRejected;
   const factory UiEvent.authFailed() = AuthFailed;
   const factory UiEvent.storageFailed() = StorageFailed;
 }
 
+class QueuedUiEvent {
+  const QueuedUiEvent(this.seq, this.event);
+
+  final int seq;
+  final UiEvent event;
+}
+
 final uiEventProvider =
-    NotifierProvider<UiEventNotifier, List<UiEvent>>(UiEventNotifier.new);
+    NotifierProvider<UiEventNotifier, List<QueuedUiEvent>>(UiEventNotifier.new);
 
-class UiEventNotifier extends Notifier<List<UiEvent>> {
+class UiEventNotifier extends Notifier<List<QueuedUiEvent>> {
+  int _nextSeq = 0;
+
   @override
-  List<UiEvent> build() => const [];
+  List<QueuedUiEvent> build() => const [];
 
-  void emit(UiEvent event) => state = [...state, event];
+  void emit(UiEvent event) =>
+      state = [...state, QueuedUiEvent(_nextSeq++, event)];
 
-  void consume(UiEvent event) {
-    final index = state.indexOf(event);
-    if (index < 0) return;
-    state = [...state]..removeAt(index);
-  }
+  void consumeThrough(int seq) =>
+      state = [for (final queued in state) if (queued.seq > seq) queued];
 }

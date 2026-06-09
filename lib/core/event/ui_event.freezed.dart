@@ -55,11 +55,10 @@ extension UiEventPatterns on UiEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( PaymentStarted value)?  paymentStarted,TResult Function( PaymentFailed value)?  paymentFailed,TResult Function( OtpRejected value)?  otpRejected,TResult Function( AuthFailed value)?  authFailed,TResult Function( StorageFailed value)?  storageFailed,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( PaymentFailed value)?  paymentFailed,TResult Function( OtpRejected value)?  otpRejected,TResult Function( AuthFailed value)?  authFailed,TResult Function( StorageFailed value)?  storageFailed,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case PaymentStarted() when paymentStarted != null:
-return paymentStarted(_that);case PaymentFailed() when paymentFailed != null:
+case PaymentFailed() when paymentFailed != null:
 return paymentFailed(_that);case OtpRejected() when otpRejected != null:
 return otpRejected(_that);case AuthFailed() when authFailed != null:
 return authFailed(_that);case StorageFailed() when storageFailed != null:
@@ -81,11 +80,10 @@ return storageFailed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( PaymentStarted value)  paymentStarted,required TResult Function( PaymentFailed value)  paymentFailed,required TResult Function( OtpRejected value)  otpRejected,required TResult Function( AuthFailed value)  authFailed,required TResult Function( StorageFailed value)  storageFailed,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( PaymentFailed value)  paymentFailed,required TResult Function( OtpRejected value)  otpRejected,required TResult Function( AuthFailed value)  authFailed,required TResult Function( StorageFailed value)  storageFailed,}){
 final _that = this;
 switch (_that) {
-case PaymentStarted():
-return paymentStarted(_that);case PaymentFailed():
+case PaymentFailed():
 return paymentFailed(_that);case OtpRejected():
 return otpRejected(_that);case AuthFailed():
 return authFailed(_that);case StorageFailed():
@@ -103,11 +101,10 @@ return storageFailed(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( PaymentStarted value)?  paymentStarted,TResult? Function( PaymentFailed value)?  paymentFailed,TResult? Function( OtpRejected value)?  otpRejected,TResult? Function( AuthFailed value)?  authFailed,TResult? Function( StorageFailed value)?  storageFailed,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( PaymentFailed value)?  paymentFailed,TResult? Function( OtpRejected value)?  otpRejected,TResult? Function( AuthFailed value)?  authFailed,TResult? Function( StorageFailed value)?  storageFailed,}){
 final _that = this;
 switch (_that) {
-case PaymentStarted() when paymentStarted != null:
-return paymentStarted(_that);case PaymentFailed() when paymentFailed != null:
+case PaymentFailed() when paymentFailed != null:
 return paymentFailed(_that);case OtpRejected() when otpRejected != null:
 return otpRejected(_that);case AuthFailed() when authFailed != null:
 return authFailed(_that);case StorageFailed() when storageFailed != null:
@@ -128,10 +125,9 @@ return storageFailed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String paymentId)?  paymentStarted,TResult Function( String paymentId)?  paymentFailed,TResult Function()?  otpRejected,TResult Function()?  authFailed,TResult Function()?  storageFailed,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String paymentId)?  paymentFailed,TResult Function()?  otpRejected,TResult Function()?  authFailed,TResult Function()?  storageFailed,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case PaymentStarted() when paymentStarted != null:
-return paymentStarted(_that.paymentId);case PaymentFailed() when paymentFailed != null:
+case PaymentFailed() when paymentFailed != null:
 return paymentFailed(_that.paymentId);case OtpRejected() when otpRejected != null:
 return otpRejected();case AuthFailed() when authFailed != null:
 return authFailed();case StorageFailed() when storageFailed != null:
@@ -153,10 +149,9 @@ return storageFailed();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String paymentId)  paymentStarted,required TResult Function( String paymentId)  paymentFailed,required TResult Function()  otpRejected,required TResult Function()  authFailed,required TResult Function()  storageFailed,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String paymentId)  paymentFailed,required TResult Function()  otpRejected,required TResult Function()  authFailed,required TResult Function()  storageFailed,}) {final _that = this;
 switch (_that) {
-case PaymentStarted():
-return paymentStarted(_that.paymentId);case PaymentFailed():
+case PaymentFailed():
 return paymentFailed(_that.paymentId);case OtpRejected():
 return otpRejected();case AuthFailed():
 return authFailed();case StorageFailed():
@@ -174,10 +169,9 @@ return storageFailed();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String paymentId)?  paymentStarted,TResult? Function( String paymentId)?  paymentFailed,TResult? Function()?  otpRejected,TResult? Function()?  authFailed,TResult? Function()?  storageFailed,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String paymentId)?  paymentFailed,TResult? Function()?  otpRejected,TResult? Function()?  authFailed,TResult? Function()?  storageFailed,}) {final _that = this;
 switch (_that) {
-case PaymentStarted() when paymentStarted != null:
-return paymentStarted(_that.paymentId);case PaymentFailed() when paymentFailed != null:
+case PaymentFailed() when paymentFailed != null:
 return paymentFailed(_that.paymentId);case OtpRejected() when otpRejected != null:
 return otpRejected();case AuthFailed() when authFailed != null:
 return authFailed();case StorageFailed() when storageFailed != null:
@@ -186,72 +180,6 @@ return storageFailed();case _:
 
 }
 }
-
-}
-
-/// @nodoc
-
-
-class PaymentStarted implements UiEvent {
-  const PaymentStarted(this.paymentId);
-  
-
- final  String paymentId;
-
-/// Create a copy of UiEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$PaymentStartedCopyWith<PaymentStarted> get copyWith => _$PaymentStartedCopyWithImpl<PaymentStarted>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PaymentStarted&&(identical(other.paymentId, paymentId) || other.paymentId == paymentId));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,paymentId);
-
-@override
-String toString() {
-  return 'UiEvent.paymentStarted(paymentId: $paymentId)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $PaymentStartedCopyWith<$Res> implements $UiEventCopyWith<$Res> {
-  factory $PaymentStartedCopyWith(PaymentStarted value, $Res Function(PaymentStarted) _then) = _$PaymentStartedCopyWithImpl;
-@useResult
-$Res call({
- String paymentId
-});
-
-
-
-
-}
-/// @nodoc
-class _$PaymentStartedCopyWithImpl<$Res>
-    implements $PaymentStartedCopyWith<$Res> {
-  _$PaymentStartedCopyWithImpl(this._self, this._then);
-
-  final PaymentStarted _self;
-  final $Res Function(PaymentStarted) _then;
-
-/// Create a copy of UiEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? paymentId = null,}) {
-  return _then(PaymentStarted(
-null == paymentId ? _self.paymentId : paymentId // ignore: cast_nullable_to_non_nullable
-as String,
-  ));
-}
-
 
 }
 

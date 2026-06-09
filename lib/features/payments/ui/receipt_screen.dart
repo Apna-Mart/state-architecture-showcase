@@ -23,6 +23,8 @@ class ReceiptScreen extends ConsumerWidget {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: switch (data) {
+          ReceiptLoading() =>
+            const Center(child: CircularProgressIndicator()),
           ReceiptNotFound() => Center(child: Text(ref.l10n.paymentNotFound)),
           ReceiptProcessing() => _Processing(data: data),
           ReceiptSuccess() => _Success(data: data),
@@ -130,12 +132,15 @@ class _Failed extends ConsumerWidget {
             style: Theme.of(context).textTheme.titleMedium),
         const Spacer(),
         FilledButton(
-          onPressed: () => ref.read(paymentsProvider.notifier).pay(
-              billerId: data.billerId,
-              billerName: data.billerName,
-              categoryId: data.categoryId,
-              account: data.account,
-              amountPaise: data.amountPaise),
+          onPressed: () {
+            final paymentId = ref.read(paymentsProvider.notifier).pay(
+                billerId: data.billerId,
+                billerName: data.billerName,
+                categoryId: data.categoryId,
+                account: data.account,
+                amountPaise: data.amountPaise);
+            if (paymentId != null) context.go('/payment/$paymentId');
+          },
           child: Text(ref.l10n.retryPayment),
         ),
         const SizedBox(height: 8),

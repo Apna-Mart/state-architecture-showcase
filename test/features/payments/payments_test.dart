@@ -22,6 +22,21 @@ class _FailingWritesStore extends InMemoryKeyValueStore {
   }
 }
 
+class _SlowFirstPaymentWriteStore extends InMemoryKeyValueStore {
+  int _paymentWrites = 0;
+
+  @override
+  Future<void> write(String key, String value) async {
+    if (key.startsWith('payments.')) {
+      _paymentWrites++;
+      if (_paymentWrites == 1) {
+        await Future<void>.delayed(const Duration(milliseconds: 30));
+      }
+    }
+    return super.write(key, value);
+  }
+}
+
 ProviderContainer containerFailingEvery(int failEvery) {
   final container = ProviderContainer(overrides: [
     mockNetworkProvider.overrideWithValue(
@@ -37,57 +52,52 @@ Future<void> login(ProviderContainer container) async {
   await notifier.verifyOtp('123456');
 }
 
-void main() {
-  test('pay appends processing then marks success and emits started',
-      () async {
-    final container = containerFailingEvery(100);
-    await login(container);
-    await container.read(paymentsProvider.notifier).pay(
+String? payOnce(ProviderContainer container) =>
+    container.read(paymentsProvider.notifier).pay(
         billerId: 'electricity-metro',
         billerName: 'Metro Electricity',
         categoryId: 'electricity',
         account: 'K123',
         amountPaise: 45000);
+
+Future<void> settle([int milliseconds = 25]) =>
+    Future<void>.delayed(Duration(milliseconds: milliseconds));
+
+List<UiEvent> eventsOf(ProviderContainer container) =>
+    [for (final q in container.read(uiEventProvider)) q.event];
+
+void main() {
+  test('pay returns the new payment id and marks success', () async {
+    final container = containerFailingEvery(100);
+    await login(container);
+    final paymentId = payOnce(container);
+    expect(paymentId, 'pay-1');
+    await settle();
     final payments = container.read(paymentsProvider);
     expect(payments.items.length, 1);
     expect(payments.items.single.status, PaymentStatus.success);
-    expect(container.read(uiEventProvider).whereType<PaymentStarted>().length,
-        1);
+    expect(eventsOf(container), isEmpty);
   });
 
   test('pay marks payment failed and emits paymentFailed on decline',
       () async {
     final container = containerFailingEvery(1);
     await login(container);
-    await container.read(paymentsProvider.notifier).pay(
-        billerId: 'electricity-metro',
-        billerName: 'Metro Electricity',
-        categoryId: 'electricity',
-        account: 'K123',
-        amountPaise: 45000);
+    payOnce(container);
+    await settle();
     final payments = container.read(paymentsProvider);
     expect(payments.items.single.status, PaymentStatus.failed);
-    expect(container.read(uiEventProvider).whereType<PaymentFailed>().length,
-        1);
+    expect(eventsOf(container).whereType<PaymentFailed>().length, 1);
   });
 
-  test('pay re-entry for same bill while processing is ignored', () async {
+  test('pay re-entry for same bill while processing returns null', () async {
     final container = containerFailingEvery(100);
     await login(container);
-    final notifier = container.read(paymentsProvider.notifier);
-    final first = notifier.pay(
-        billerId: 'electricity-metro',
-        billerName: 'Metro Electricity',
-        categoryId: 'electricity',
-        account: 'K123',
-        amountPaise: 45000);
-    final second = notifier.pay(
-        billerId: 'electricity-metro',
-        billerName: 'Metro Electricity',
-        categoryId: 'electricity',
-        account: 'K123',
-        amountPaise: 45000);
-    await Future.wait([first, second]);
+    final firstId = payOnce(container);
+    final secondId = payOnce(container);
+    expect(firstId, isNotNull);
+    expect(secondId, isNull);
+    await settle();
     expect(container.read(paymentsProvider).items.length, 1);
   });
 
@@ -99,36 +109,44 @@ void main() {
     ]);
     addTearDown(container.dispose);
     await login(container);
-    final payFuture = container.read(paymentsProvider.notifier).pay(
-        billerId: 'electricity-metro',
-        billerName: 'Metro Electricity',
-        categoryId: 'electricity',
-        account: 'K123',
-        amountPaise: 45000);
+    payOnce(container);
     container.read(authProvider.notifier).logout();
-    await payFuture;
+    await settle();
     expect(container.read(paymentsProvider).items, isEmpty);
-    expect(
-        container.read(uiEventProvider).whereType<PaymentFailed>(), isEmpty);
+    expect(eventsOf(container).whereType<PaymentFailed>(), isEmpty);
   });
 
-  test('successful pay invalidates due bills so the list refetches', () async {
+  test('successful pay removes the paid bill from due list without refetch',
+      () async {
     final container = containerFailingEvery(100);
     await login(container);
     await container.read(savedBillersProvider.notifier).save(const SavedBiller(
         billerId: 'electricity-metro', account: 'K123', nickname: 'Home'));
-    await container.read(dueBillsProvider.future);
-    var notifications = 0;
-    final sub = container.listen(dueBillsProvider, (_, _) => notifications++);
-    await container.read(paymentsProvider.notifier).pay(
-        billerId: 'electricity-metro',
-        billerName: 'Metro Electricity',
-        categoryId: 'electricity',
-        account: 'K123',
-        amountPaise: 45000);
-    await container.read(dueBillsProvider.future);
-    expect(notifications, greaterThan(0));
-    sub.close();
+    final before = await container.read(dueBillsProvider.future);
+    expect(before, hasLength(1));
+    payOnce(container);
+    await settle();
+    final after = await container.read(dueBillsProvider.future);
+    expect(after, isEmpty);
+  });
+
+  test('rapid persists land in order so storage holds the final state',
+      () async {
+    final store = _SlowFirstPaymentWriteStore();
+    final container = ProviderContainer(overrides: [
+      mockNetworkProvider.overrideWithValue(
+          MockNetwork(minDelayMs: 0, maxDelayMs: 1, failEvery: 100)),
+      keyValueStoreProvider.overrideWithValue(store),
+    ]);
+    addTearDown(container.dispose);
+    await login(container);
+    payOnce(container);
+    await settle(80);
+    expect(container.read(paymentsProvider).items.single.status,
+        PaymentStatus.success);
+    final stored = store.read('payments.user-9876543210')!;
+    expect(stored, contains('"status":"success"'));
+    expect(stored, isNot(contains('"status":"processing"')));
   });
 
   test('persist failure keeps the payment record and emits storageFailed',
@@ -141,28 +159,19 @@ void main() {
     ]);
     addTearDown(container.dispose);
     await login(container);
-    await container.read(paymentsProvider.notifier).pay(
-        billerId: 'electricity-metro',
-        billerName: 'Metro Electricity',
-        categoryId: 'electricity',
-        account: 'K123',
-        amountPaise: 45000);
+    payOnce(container);
+    await settle();
     await container.pump();
     expect(container.read(paymentsProvider).items.single.status,
         PaymentStatus.success);
-    expect(
-        container.read(uiEventProvider).whereType<StorageFailed>(), isNotEmpty);
+    expect(eventsOf(container).whereType<StorageFailed>(), isNotEmpty);
   });
 
   test('logout wipes payment history', () async {
     final container = containerFailingEvery(100);
     await login(container);
-    await container.read(paymentsProvider.notifier).pay(
-        billerId: 'electricity-metro',
-        billerName: 'Metro Electricity',
-        categoryId: 'electricity',
-        account: 'K123',
-        amountPaise: 45000);
+    payOnce(container);
+    await settle();
     container.read(authProvider.notifier).logout();
     expect(container.read(paymentsProvider).items, isEmpty);
   });

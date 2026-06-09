@@ -23,13 +23,15 @@ Future<void> login(ProviderContainer container) async {
   await notifier.verifyOtp('123456');
 }
 
-Future<void> payOnce(ProviderContainer container) =>
-    container.read(paymentsProvider.notifier).pay(
-        billerId: 'electricity-metro',
-        billerName: 'Metro Electricity',
-        categoryId: 'electricity',
-        account: 'K123',
-        amountPaise: 45000);
+Future<void> payOnce(ProviderContainer container) async {
+  container.read(paymentsProvider.notifier).pay(
+      billerId: 'electricity-metro',
+      billerName: 'Metro Electricity',
+      categoryId: 'electricity',
+      account: 'K123',
+      amountPaise: 45000);
+  await Future<void>.delayed(const Duration(milliseconds: 25));
+}
 
 void main() {
   test('unknown payment id projects notFound', () async {
@@ -37,6 +39,15 @@ void main() {
     await login(container);
     expect(container.read(receiptScreenDataProvider('pay-99')),
         const ReceiptScreenData.notFound());
+  });
+
+  test('logged-out session projects loading instead of notFound', () async {
+    final container = containerFailingEvery(100);
+    await login(container);
+    await payOnce(container);
+    container.read(authProvider.notifier).logout();
+    expect(container.read(receiptScreenDataProvider('pay-1')),
+        const ReceiptScreenData.loading());
   });
 
   test('successful payment projects receipt offering save biller', () async {

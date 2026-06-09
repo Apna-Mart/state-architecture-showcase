@@ -56,7 +56,8 @@ void main() {
     await notifier.sendOtp('9876543210');
     await notifier.verifyOtp('12');
     expect(container.read(authProvider), const Auth.otpSent('9876543210'));
-    expect(container.read(uiEventProvider), const [UiEvent.otpRejected()]);
+    expect(container.read(uiEventProvider).map((q) => q.event),
+        const [UiEvent.otpRejected()]);
   });
 
   test('sendOtp re-entry while in flight is ignored', () async {
@@ -78,7 +79,8 @@ void main() {
     await notifier.sendOtp('9876543210');
     await notifier.verifyOtp('123456');
     expect(container.read(authProvider), const Auth.otpSent('9876543210'));
-    expect(container.read(uiEventProvider), const [UiEvent.authFailed()]);
+    expect(container.read(uiEventProvider).map((q) => q.event),
+        const [UiEvent.authFailed()]);
   });
 
   test('sendOtp network failure restores unauthenticated and emits authFailed',
@@ -90,7 +92,8 @@ void main() {
     addTearDown(container.dispose);
     await container.read(authProvider.notifier).sendOtp('9876543210');
     expect(container.read(authProvider), const Auth.unauthenticated());
-    expect(container.read(uiEventProvider), const [UiEvent.authFailed()]);
+    expect(container.read(uiEventProvider).map((q) => q.event),
+        const [UiEvent.authFailed()]);
   });
 
   test('logout resets to unauthenticated', () async {

@@ -119,17 +119,18 @@ void main() {
         container.listen(billReviewScreenDataProvider(params), (_, _) {});
     await container.read(billerCatalogProvider.future);
     await container.pump();
-    final payFuture = container.read(paymentsProvider.notifier).pay(
+    final paymentId = container.read(paymentsProvider.notifier).pay(
         billerId: 'dth-metro',
         billerName: 'Metro DTH',
         categoryId: 'dth',
         account: 'D77',
         amountPaise: 25000);
+    expect(paymentId, isNotNull);
     final during = container.read(billReviewScreenDataProvider(params))
         as BillReviewLoaded;
     expect(during.paying, isTrue);
     expect(during.canPay, isFalse);
-    await payFuture;
+    await Future<void>.delayed(const Duration(milliseconds: 25));
     sub.close();
   });
 }

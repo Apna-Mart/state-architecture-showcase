@@ -23,6 +23,10 @@ abstract class SavedBillers with _$SavedBillers {
   bool contains(String billerId, String account) => items
       .any((s) => s.billerId == billerId && s.account == account);
 
+  String get accountsKey => items
+      .map((s) => '${s.billerId}${s.account}')
+      .join('');
+
   SavedBillers adding(SavedBiller saved) =>
       SavedBillers(items: [...items, saved]);
 

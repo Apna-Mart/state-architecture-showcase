@@ -4,6 +4,7 @@ part 'receipt_screen_data.freezed.dart';
 
 @freezed
 sealed class ReceiptScreenData with _$ReceiptScreenData {
+  const factory ReceiptScreenData.loading() = ReceiptLoading;
   const factory ReceiptScreenData.notFound() = ReceiptNotFound;
   const factory ReceiptScreenData.processing({
     required String billerName,

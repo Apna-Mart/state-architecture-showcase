@@ -10,8 +10,12 @@ mixin StaleWhileRevalidate<T> on AsyncNotifier<T> {
   void markFetched() => _fetchedAt = ref.read(clockProvider)();
 
   void refreshIfStale() {
+    if (state.isLoading) return;
     final fetchedAt = _fetchedAt;
-    if (fetchedAt == null || state.isLoading) return;
+    if (fetchedAt == null) {
+      if (state.hasError) ref.invalidateSelf();
+      return;
+    }
     final age = ref.read(clockProvider)().difference(fetchedAt);
     if (age < maxAge) return;
     ref.invalidateSelf();

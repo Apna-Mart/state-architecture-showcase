@@ -55,10 +55,11 @@ extension ReceiptScreenDataPatterns on ReceiptScreenData {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ReceiptNotFound value)?  notFound,TResult Function( ReceiptProcessing value)?  processing,TResult Function( ReceiptSuccess value)?  success,TResult Function( ReceiptFailed value)?  failed,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ReceiptLoading value)?  loading,TResult Function( ReceiptNotFound value)?  notFound,TResult Function( ReceiptProcessing value)?  processing,TResult Function( ReceiptSuccess value)?  success,TResult Function( ReceiptFailed value)?  failed,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case ReceiptNotFound() when notFound != null:
+case ReceiptLoading() when loading != null:
+return loading(_that);case ReceiptNotFound() when notFound != null:
 return notFound(_that);case ReceiptProcessing() when processing != null:
 return processing(_that);case ReceiptSuccess() when success != null:
 return success(_that);case ReceiptFailed() when failed != null:
@@ -80,10 +81,11 @@ return failed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ReceiptNotFound value)  notFound,required TResult Function( ReceiptProcessing value)  processing,required TResult Function( ReceiptSuccess value)  success,required TResult Function( ReceiptFailed value)  failed,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ReceiptLoading value)  loading,required TResult Function( ReceiptNotFound value)  notFound,required TResult Function( ReceiptProcessing value)  processing,required TResult Function( ReceiptSuccess value)  success,required TResult Function( ReceiptFailed value)  failed,}){
 final _that = this;
 switch (_that) {
-case ReceiptNotFound():
+case ReceiptLoading():
+return loading(_that);case ReceiptNotFound():
 return notFound(_that);case ReceiptProcessing():
 return processing(_that);case ReceiptSuccess():
 return success(_that);case ReceiptFailed():
@@ -101,10 +103,11 @@ return failed(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ReceiptNotFound value)?  notFound,TResult? Function( ReceiptProcessing value)?  processing,TResult? Function( ReceiptSuccess value)?  success,TResult? Function( ReceiptFailed value)?  failed,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ReceiptLoading value)?  loading,TResult? Function( ReceiptNotFound value)?  notFound,TResult? Function( ReceiptProcessing value)?  processing,TResult? Function( ReceiptSuccess value)?  success,TResult? Function( ReceiptFailed value)?  failed,}){
 final _that = this;
 switch (_that) {
-case ReceiptNotFound() when notFound != null:
+case ReceiptLoading() when loading != null:
+return loading(_that);case ReceiptNotFound() when notFound != null:
 return notFound(_that);case ReceiptProcessing() when processing != null:
 return processing(_that);case ReceiptSuccess() when success != null:
 return success(_that);case ReceiptFailed() when failed != null:
@@ -125,9 +128,10 @@ return failed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  notFound,TResult Function( String billerName,  int amountPaise)?  processing,TResult Function( String paymentId,  String billerId,  String billerName,  String account,  int amountPaise,  DateTime paidAt,  bool canSaveBiller)?  success,TResult Function( String billerId,  String billerName,  String categoryId,  String account,  int amountPaise)?  failed,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function()?  notFound,TResult Function( String billerName,  int amountPaise)?  processing,TResult Function( String paymentId,  String billerId,  String billerName,  String account,  int amountPaise,  DateTime paidAt,  bool canSaveBiller)?  success,TResult Function( String billerId,  String billerName,  String categoryId,  String account,  int amountPaise)?  failed,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case ReceiptNotFound() when notFound != null:
+case ReceiptLoading() when loading != null:
+return loading();case ReceiptNotFound() when notFound != null:
 return notFound();case ReceiptProcessing() when processing != null:
 return processing(_that.billerName,_that.amountPaise);case ReceiptSuccess() when success != null:
 return success(_that.paymentId,_that.billerId,_that.billerName,_that.account,_that.amountPaise,_that.paidAt,_that.canSaveBiller);case ReceiptFailed() when failed != null:
@@ -149,9 +153,10 @@ return failed(_that.billerId,_that.billerName,_that.categoryId,_that.account,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  notFound,required TResult Function( String billerName,  int amountPaise)  processing,required TResult Function( String paymentId,  String billerId,  String billerName,  String account,  int amountPaise,  DateTime paidAt,  bool canSaveBiller)  success,required TResult Function( String billerId,  String billerName,  String categoryId,  String account,  int amountPaise)  failed,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function()  notFound,required TResult Function( String billerName,  int amountPaise)  processing,required TResult Function( String paymentId,  String billerId,  String billerName,  String account,  int amountPaise,  DateTime paidAt,  bool canSaveBiller)  success,required TResult Function( String billerId,  String billerName,  String categoryId,  String account,  int amountPaise)  failed,}) {final _that = this;
 switch (_that) {
-case ReceiptNotFound():
+case ReceiptLoading():
+return loading();case ReceiptNotFound():
 return notFound();case ReceiptProcessing():
 return processing(_that.billerName,_that.amountPaise);case ReceiptSuccess():
 return success(_that.paymentId,_that.billerId,_that.billerName,_that.account,_that.amountPaise,_that.paidAt,_that.canSaveBiller);case ReceiptFailed():
@@ -169,9 +174,10 @@ return failed(_that.billerId,_that.billerName,_that.categoryId,_that.account,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  notFound,TResult? Function( String billerName,  int amountPaise)?  processing,TResult? Function( String paymentId,  String billerId,  String billerName,  String account,  int amountPaise,  DateTime paidAt,  bool canSaveBiller)?  success,TResult? Function( String billerId,  String billerName,  String categoryId,  String account,  int amountPaise)?  failed,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function()?  notFound,TResult? Function( String billerName,  int amountPaise)?  processing,TResult? Function( String paymentId,  String billerId,  String billerName,  String account,  int amountPaise,  DateTime paidAt,  bool canSaveBiller)?  success,TResult? Function( String billerId,  String billerName,  String categoryId,  String account,  int amountPaise)?  failed,}) {final _that = this;
 switch (_that) {
-case ReceiptNotFound() when notFound != null:
+case ReceiptLoading() when loading != null:
+return loading();case ReceiptNotFound() when notFound != null:
 return notFound();case ReceiptProcessing() when processing != null:
 return processing(_that.billerName,_that.amountPaise);case ReceiptSuccess() when success != null:
 return success(_that.paymentId,_that.billerId,_that.billerName,_that.account,_that.amountPaise,_that.paidAt,_that.canSaveBiller);case ReceiptFailed() when failed != null:
@@ -182,6 +188,38 @@ return failed(_that.billerId,_that.billerName,_that.categoryId,_that.account,_th
 }
 
 }
+
+/// @nodoc
+
+
+class ReceiptLoading implements ReceiptScreenData {
+  const ReceiptLoading();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReceiptLoading);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ReceiptScreenData.loading()';
+}
+
+
+}
+
+
+
 
 /// @nodoc
 

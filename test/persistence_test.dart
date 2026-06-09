@@ -25,13 +25,15 @@ Future<void> login(ProviderContainer container, String phone) async {
   await notifier.verifyOtp('123456');
 }
 
-Future<void> payOnce(ProviderContainer container) =>
-    container.read(paymentsProvider.notifier).pay(
-        billerId: 'electricity-metro',
-        billerName: 'Metro Electricity',
-        categoryId: 'electricity',
-        account: 'K123',
-        amountPaise: 45000);
+Future<void> payOnce(ProviderContainer container) async {
+  container.read(paymentsProvider.notifier).pay(
+      billerId: 'electricity-metro',
+      billerName: 'Metro Electricity',
+      categoryId: 'electricity',
+      account: 'K123',
+      amountPaise: 45000);
+  await Future<void>.delayed(const Duration(milliseconds: 25));
+}
 
 void main() {
   test('session restores authenticated state in a fresh container', () async {

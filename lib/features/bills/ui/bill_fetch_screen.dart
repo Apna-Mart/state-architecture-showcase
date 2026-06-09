@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -130,7 +131,14 @@ class _FetchField extends ConsumerStatefulWidget {
 }
 
 class _FetchFieldState extends ConsumerState<_FetchField> {
-  final _controller = TextEditingController();
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(
+        text: ref.read(billFetchFormProvider).valueOf(widget.field.key));
+  }
 
   @override
   void dispose() {
@@ -142,6 +150,7 @@ class _FetchFieldState extends ConsumerState<_FetchField> {
   Widget build(BuildContext context) {
     return TextField(
       controller: _controller,
+      inputFormatters: [FilteringTextInputFormatter.deny('|')],
       decoration: InputDecoration(
           labelText: widget.field.label,
           hintText: widget.field.hint,
@@ -161,7 +170,14 @@ class _AmountField extends ConsumerStatefulWidget {
 }
 
 class _AmountFieldState extends ConsumerState<_AmountField> {
-  final _controller = TextEditingController();
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(
+        text: ref.read(billFetchFormProvider).amountText);
+  }
 
   @override
   void dispose() {

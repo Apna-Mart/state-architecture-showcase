@@ -18,11 +18,21 @@ class DueBillsNotifier extends AsyncNotifier<List<FetchedBill>>
   @override
   Future<List<FetchedBill>> build() async {
     ref.watch(authProvider.select((a) => a.userIdOrNull));
-    final saved = ref.watch(savedBillersProvider);
-    if (saved.items.isEmpty) return const [];
+    ref.watch(savedBillersProvider.select((s) => s.accountsKey));
+    final saved = ref.read(savedBillersProvider).items;
+    if (saved.isEmpty) return const [];
     final bills =
-        await ref.read(billRepositoryProvider).fetchDueBills(saved.items);
+        await ref.read(billRepositoryProvider).fetchDueBills(saved);
     markFetched();
     return bills;
+  }
+
+  void removePaid(String billerId, String account) {
+    final current = state.value;
+    if (current == null) return;
+    state = AsyncData([
+      for (final bill in current)
+        if (!(bill.billerId == billerId && bill.account == account)) bill,
+    ]);
   }
 }

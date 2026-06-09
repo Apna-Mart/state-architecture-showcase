@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/format/formats.dart';
 import '../../../l10n/l10n.dart';
@@ -148,7 +149,7 @@ class _PayButton extends ConsumerWidget {
     if (state == null) return const SizedBox.shrink();
     final locale = ref.languageCode;
     return FilledButton(
-      onPressed: state.canPay ? () => _pay(ref) : null,
+      onPressed: state.canPay ? () => _pay(context, ref) : null,
       child: state.paying
           ? const SizedBox(
               height: 20,
@@ -158,14 +159,15 @@ class _PayButton extends ConsumerWidget {
     );
   }
 
-  void _pay(WidgetRef ref) {
+  void _pay(BuildContext context, WidgetRef ref) {
     final data = ref.read(billReviewScreenDataProvider(params));
     if (data is! BillReviewLoaded) return;
-    ref.read(paymentsProvider.notifier).pay(
+    final paymentId = ref.read(paymentsProvider.notifier).pay(
         billerId: data.billerId,
         billerName: data.billerName,
         categoryId: data.categoryId,
         account: data.account,
         amountPaise: data.amountPaise);
+    if (paymentId != null) context.go('/payment/$paymentId');
   }
 }

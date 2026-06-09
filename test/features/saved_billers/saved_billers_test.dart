@@ -64,7 +64,8 @@ void main() {
     await login(container, '9876543210');
     await container.read(savedBillersProvider.notifier).save(_bescom);
     expect(container.read(savedBillersProvider).items, isEmpty);
-    expect(container.read(uiEventProvider), const [UiEvent.storageFailed()]);
+    expect(container.read(uiEventProvider).map((q) => q.event),
+        const [UiEvent.storageFailed()]);
   });
 
   test('logout wipes saved billers and relogin starts clean', () async {

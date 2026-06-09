@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../data/bill_limits.dart';
+
 part 'bill_fetch_form.freezed.dart';
 
 @freezed
@@ -22,6 +24,7 @@ abstract class BillFetchForm with _$BillFetchForm {
   int? get amountPaise {
     final rupees = double.tryParse(amountText);
     if (rupees == null || rupees <= 0) return null;
-    return (rupees * 100).round();
+    final paise = (rupees * 100).round();
+    return paise > maxAmountPaise ? null : paise;
   }
 }

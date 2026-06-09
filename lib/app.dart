@@ -26,6 +26,9 @@ class _AppState extends ConsumerState<App> {
   void initState() {
     super.initState();
     _lifecycle = AppLifecycleListener(onResume: _refreshStale);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _drain(ref.read(uiEventProvider));
+    });
   }
 
   void _refreshStale() {
@@ -41,12 +44,7 @@ class _AppState extends ConsumerState<App> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(uiEventProvider, (_, events) {
-      for (final event in events) {
-        _handle(event);
-        ref.read(uiEventProvider.notifier).consume(event);
-      }
-    });
+    ref.listen(uiEventProvider, (_, events) => _drain(events));
     final settings = ref.watch(settingsProvider);
     return MaterialApp.router(
       onGenerateTitle: (_) => ref.read(l10nProvider).strings.appTitle,
@@ -61,11 +59,15 @@ class _AppState extends ConsumerState<App> {
     );
   }
 
-  void _handle(UiEvent event) {
-    if (event case PaymentStarted(:final paymentId)) {
-      ref.read(appRouterProvider).go('/payment/$paymentId');
-      return;
+  void _drain(List<QueuedUiEvent> events) {
+    if (events.isEmpty) return;
+    for (final queued in events) {
+      _handle(queued.event);
     }
+    ref.read(uiEventProvider.notifier).consumeThrough(events.last.seq);
+  }
+
+  void _handle(UiEvent event) {
     final messenger = scaffoldMessengerKey.currentState;
     if (messenger == null) return;
     final l10n = ref.read(l10nProvider).strings;
@@ -82,8 +84,6 @@ class _AppState extends ConsumerState<App> {
       case StorageFailed():
         messenger.showSnackBar(
             SnackBar(content: Text(l10n.storageFailedMessage)));
-      case PaymentStarted():
-        return;
     }
   }
 }

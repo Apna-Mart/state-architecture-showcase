@@ -22,18 +22,20 @@ void main() {
         const HistoryScreenData.empty());
 
     final payments = container.read(paymentsProvider.notifier);
-    await payments.pay(
+    payments.pay(
         billerId: 'electricity-metro',
         billerName: 'Metro Electricity',
         categoryId: 'electricity',
         account: 'K1',
         amountPaise: 10000);
-    await payments.pay(
+    await Future<void>.delayed(const Duration(milliseconds: 25));
+    payments.pay(
         billerId: 'water-city',
         billerName: 'City Water',
         categoryId: 'water',
         account: 'W1',
         amountPaise: 20000);
+    await Future<void>.delayed(const Duration(milliseconds: 25));
 
     final loaded = container.read(historyScreenDataProvider) as HistoryLoaded;
     expect(loaded.items.length, 2);

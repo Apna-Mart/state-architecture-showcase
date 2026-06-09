@@ -5,6 +5,7 @@ import '../../../core/time/clock.dart';
 import '../../billers/data/biller.dart';
 import '../../billers/data/biller_catalog_provider.dart';
 import '../../payments/data/payments_provider.dart';
+import '../data/bill_limits.dart';
 import '../data/fetched_bill_provider.dart';
 import 'bill_review_screen_data.dart';
 
@@ -25,8 +26,10 @@ final billReviewScreenDataProvider = Provider.autoDispose
 
   if (biller.mode == BillerMode.openAmount) {
     final amountPaise = params.amountPaise;
-    if (amountPaise == null) {
-      return const BillReviewScreenData.error('Amount missing');
+    if (amountPaise == null ||
+        amountPaise <= 0 ||
+        amountPaise > maxAmountPaise) {
+      return const BillReviewScreenData.error('Invalid amount');
     }
     return _review(biller, params.account, amountPaise, null, null, paying);
   }
